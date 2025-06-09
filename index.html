@@ -1,0 +1,1865 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Élèves - Générateur LSU</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!--
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1d29;
+            color: #ffffff;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: #252a3a;
+            padding: 20px;
+            border-right: 1px solid #3a3f52;
+            overflow-y: auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .logo::before {
+            content: "📊";
+            font-size: 24px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #8b92b0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .student-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .student-item:hover {
+            background: #2c3142;
+            border-color: #4c5570;
+        }
+
+        .student-item.active {
+            background: #364785;
+            border-color: #667eea;
+        }
+
+        .student-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            color: white;
+        }
+
+        .student-avatar.john { background: #667eea; }
+        .student-avatar.marie { background: #f093fb; }
+        .student-avatar.paul { background: #4facfe; }
+
+        .student-info h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .student-info p {
+            font-size: 12px;
+            color: #8b92b0;
+        }
+
+        .add-student-btn {
+            width: 100%;
+            padding: 12px;
+            background: #667eea;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.2s ease;
+        }
+
+        .add-student-btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-1px);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            background: #1a1d29;
+        }
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #8b92b0;
+            font-size: 16px;
+        }
+
+        /* Info Cards Grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .info-card {
+            background: #252a3a;
+            border: 1px solid #3a3f52;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .info-card label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #8b92b0;
+        }
+
+        .info-card select {
+            width: 100%;
+            padding: 10px;
+            background: #1a1d29;
+            border: 1px solid #3a3f52;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .info-card select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .info-card select option {
+            background: #1a1d29;
+        }
+
+        /* Status Card */
+        .status-card {
+            background: #252a3a;
+            border: 1px solid #3a3f52;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .status-card h3 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #8b92b0;
+        }
+
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ef4444;
+        }
+
+        .status-indicator.connected {
+            background: #10b981;
+            box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+        }
+
+        .test-btn {
+            width: 100%;
+            padding: 8px;
+            background: #667eea;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-size: 12px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        /* Evaluation Section */
+        .evaluation-section {
+            margin-bottom: 40px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .section-header h2 {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .section-header::before {
+            content: "⚡";
+            font-size: 24px;
+        }
+
+        .evaluation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .eval-card {
+            background: #252a3a;
+            border: 1px solid #3a3f52;
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+        }
+
+        .eval-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .eval-card.progres::before { background: #10b981; }
+        .eval-card.comportement::before { background: #ef4444; }
+        .eval-card.autonomie::before { background: #8b5cf6; }
+        .eval-card.participation::before { background: #f59e0b; }
+
+        .eval-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .eval-icon {
+            font-size: 20px;
+        }
+
+        .eval-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .rating-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .rating-btn {
+            padding: 12px 16px;
+            border: 1px solid #3a3f52;
+            border-radius: 8px;
+            background: #1a1d29;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 13px;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .rating-btn:hover {
+            border-color: #667eea;
+            background: #252a3a;
+        }
+
+        .rating-btn.active {
+            border-color: transparent;
+            color: white;
+            font-weight: 600;
+        }
+
+        .rating-btn.excellent { background: #10b981; }
+        .rating-btn.bien { background: #3b82f6; }
+        .rating-btn.satisfaisant { background: #f59e0b; }
+        .rating-btn.ameliorer { background: #ef4444; }
+
+        /* Action Buttons */
+        .actions {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-primary { background: #667eea; color: white; }
+        .btn-success { background: #10b981; color: white; }
+        .btn-warning { background: #f59e0b; color: white; }
+        .btn-danger { background: #ef4444; color: white; }
+        .btn-info { background: #3b82f6; color: white; }
+
+        /* Comment Section */
+        .comment-section {
+            background: #252a3a;
+            border: 1px solid #3a3f52;
+            border-radius: 12px;
+            padding: 25px;
+        }
+
+        .comment-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .comment-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .comment-header::before {
+            content: "💬";
+            font-size: 20px;
+        }
+
+        .comment-textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            background: #1a1d29;
+            border: 1px solid #3a3f52;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            line-height: 1.6;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .comment-textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .comment-textarea::placeholder {
+            color: #6b7280;
+        }
+
+        .comment-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #252a3a;
+            border: 1px solid #3a3f52;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-header h3 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #8b92b0;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #8b92b0;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            background: #1a1d29;
+            border: 1px solid #3a3f52;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        /* Status messages */
+        .status-message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 2000;
+            max-width: 300px;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .status-success { background: #10b981; }
+        .status-error { background: #ef4444; }
+        .status-warning { background: #f59e0b; }
+        .status-info { background: #3b82f6; }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                padding: 15px;
+            }
+            
+            .main-content {
+                padding: 20px;
+            }
+            
+            .evaluation-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .actions {
+                flex-direction: column;
+            }
+        }
+
+        .competence-summary {
+            background: #f3f4f6;
+            border-radius: 8px;
+            padding: 10px 16px;
+            margin-top: 10px;
+            font-size: 1rem;
+        }
+        .competence-summary ul {
+            margin: 0;
+            padding-left: 1.2em;
+        }
+        .competence-summary li {
+            margin-bottom: 2px;
+        }
+    </style>
+    -->
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                Gestion des Élèves
+            </div>
+            
+            <div class="section-title">Élèves</div>
+                
+                <div id="students-container">
+                <div class="student-item active" data-student-id="john">
+                    <div class="student-avatar john">JD</div>
+                    <div class="student-info">
+                        <h4>John Doe</h4>
+                        <p>CP - CP-A</p>
+                        <p style="font-size: 10px; color: #10b981;">✓ Évaluation complète</p>
+                    </div>
+                </div>
+                
+                <div class="student-item" data-student-id="marie">
+                    <div class="student-avatar marie">ML</div>
+                    <div class="student-info">
+                        <h4>Marie Leblanc</h4>
+                        <p>CE1 - CE1-B</p>
+                        <p style="font-size: 10px; color: #f59e0b;">⚠️ 2/4 évalué(s)</p>
+            </div>
+                </div>
+                
+                <div class="student-item" data-student-id="paul">
+                    <div class="student-avatar paul">PD</div>
+                    <div class="student-info">
+                        <h4>Paul Durand</h4>
+                        <p>CE1 - CE1-B</p>
+                        <p style="font-size: 10px; color: #6b7280;">Aucune évaluation</p>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="add-student-btn" id="addStudentBtn">+ Ajouter un élève</button>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="header">
+                <h1 id="currentStudentName">Sélectionnez un élève</h1>
+                <p>Génération automatique de commentaires personnalisés</p>
+            </div>
+            
+            <!-- Info Grid -->
+            <div class="info-grid">
+                <div class="info-card">
+                    <label>Niveau</label>
+                    <select id="niveauSelect">
+                        <option value="cp">CP</option>
+                        <option value="ce1">CE1</option>
+                        <option value="ce2">CE2</option>
+                        <option value="cm1">CM1</option>
+                        <option value="cm2">CM2</option>
+                    </select>
+                </div>
+                
+                <div class="info-card">
+                    <label>Période</label>
+                    <select id="periodeSelect">
+                        <option value="t1">Trimestre 1</option>
+                        <option value="t2">Trimestre 2</option>
+                        <option value="t3">Trimestre 3</option>
+                        <option value="s1">Semestre 1</option>
+                        <option value="s2">Semestre 2</option>
+                    </select>
+                </div>
+                
+                <div class="info-card">
+                    <label for="matiereSelect">Matière</label>
+                    <select id="matiereSelect" class="form-control">
+                        <option value="francais">Français</option>
+                        <option value="mathematiques">Mathématiques</option>
+                        <option value="histoire">Histoire</option>
+                        <option value="geographie">Géographie</option>
+                        <option value="sciences">Sciences</option>
+                    </select>
+                </div>
+                
+                <div class="info-card">
+                    <label for="modelSelect">Modèle IA</label>
+                    <select id="modelSelect" class="form-control">
+                        <!-- Les options seront ajoutées dynamiquement -->
+                    </select>
+                </div>
+                
+                <div class="status-card">
+                    <h3>🔗 Statut Ollama</h3>
+                    <div class="status-item">
+                        <span>Non testé</span>
+                        <div class="status-indicator" id="ollamaStatus"></div>
+                    </div>
+                    <button class="test-btn" onclick="testOllamaConnection()">Tester connexion Ollama</button>
+                </div>
+            </div>
+
+            <!-- Evaluation Section -->
+            <div class="evaluation-section">
+                <div class="section-header">
+                    <h2>Évaluation des Compétences</h2>
+                </div>
+                
+                <div class="evaluation-grid">
+                    <div class="eval-card progres">
+                        <div class="eval-header">
+                            <div class="eval-icon">📈</div>
+                            <div class="eval-title">Progrès observés</div>
+                        </div>
+                        <div class="rating-grid">
+                            <button class="rating-btn excellent" data-category="progres" data-value="excellent">Excellent</button>
+                            <button class="rating-btn bien" data-category="progres" data-value="bien">Bien</button>
+                            <button class="rating-btn satisfaisant" data-category="progres" data-value="satisfaisant">Satisfaisant</button>
+                            <button class="rating-btn ameliorer" data-category="progres" data-value="ameliorer">À améliorer</button>
+                        </div>
+                    </div>
+                    
+                    <div class="eval-card comportement">
+                        <div class="eval-header">
+                            <div class="eval-icon">❤️</div>
+                            <div class="eval-title">Comportement</div>
+                        </div>
+                        <div class="rating-grid">
+                            <button class="rating-btn excellent" data-category="comportement" data-value="excellent">Excellent</button>
+                            <button class="rating-btn bien" data-category="comportement" data-value="tresbien">Très bien</button>
+                            <button class="rating-btn satisfaisant" data-category="comportement" data-value="correct">Correct</button>
+                            <button class="rating-btn ameliorer" data-category="comportement" data-value="surveiller">À surveiller</button>
+                        </div>
+                    </div>
+                    
+                    <div class="eval-card autonomie">
+                        <div class="eval-header">
+                            <div class="eval-icon">🚀</div>
+                            <div class="eval-title">Autonomie</div>
+                        </div>
+                        <div class="rating-grid">
+                            <button class="rating-btn excellent" data-category="autonomie" data-value="excellente">Excellente</button>
+                            <button class="rating-btn bien" data-category="autonomie" data-value="bonne">Bonne</button>
+                            <button class="rating-btn satisfaisant" data-category="autonomie" data-value="moyenne">Moyenne</button>
+                            <button class="rating-btn ameliorer" data-category="autonomie" data-value="insuffisante">Insuffisante</button>
+                        </div>
+                    </div>
+                    
+                    <div class="eval-card participation">
+                        <div class="eval-header">
+                            <div class="eval-icon">💡</div>
+                            <div class="eval-title">Participation</div>
+                        </div>
+                        <div class="rating-grid">
+                            <button class="rating-btn excellent" data-category="participation" data-value="tresactive">Très active</button>
+                            <button class="rating-btn bien" data-category="participation" data-value="active">Active</button>
+                            <button class="rating-btn satisfaisant" data-category="participation" data-value="moderee">Modérée</button>
+                            <button class="rating-btn ameliorer" data-category="participation" data-value="discrete">Discrète</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sous les boutons d'évaluation -->
+            <div id="competence-summary" class="competence-summary"></div>
+            
+            <!-- Action Buttons -->
+            <div class="actions">
+                <button class="action-btn btn-primary" id="generateBtn">
+                    <span>🤖</span>
+                    <span>Générer avec IA</span>
+                </button>
+                <button class="action-btn btn-success" id="openN8nBtn">
+                    <span>🔗</span>
+                    <span>Ouvrir n8n</span>
+                </button>
+                <button class="action-btn btn-info" id="testOllamaBtn">
+                    <span>🔍</span>
+                    <span>Test Ollama</span>
+                </button>
+                <button class="action-btn btn-secondary" id="copyBtn">
+                    <span>📋</span>
+                    <span>Copier</span>
+                </button>
+                <button class="action-btn btn-secondary" id="shareBtn">
+                    <span>📢</span>
+                    <span>Partager</span>
+                </button>
+                <button class="action-btn btn-secondary" id="resetBtn">
+                    <span>🔄</span>
+                    <span>Réinitialiser</span>
+                </button>
+                <button class="action-btn btn-secondary" id="exportBtn">
+                    <span>📤</span>
+                    <span>Exporter</span>
+                </button>
+                <button class="action-btn btn-secondary" id="importBtn">
+                    <span>📥</span>
+                    <span>Importer</span>
+                </button>
+                <button class="action-btn btn-secondary" id="addStudentBtn">
+                    <span>➕</span>
+                    <span>Ajouter un élève</span>
+                </button>
+            </div>
+            
+            <!-- Comment Section -->
+            <div class="comment-section">
+                <div class="comment-header">
+                    <h3>Commentaire généré</h3>
+                </div>
+                <textarea class="comment-textarea" id="commentaire" placeholder="Sélectionnez les évaluations puis cliquez sur 'Générer avec IA' pour créer un commentaire personnalisé..."></textarea>
+                
+                <div class="comment-actions">
+                    <button class="action-btn btn-primary" onclick="copyComment()">
+                        📋 Copier
+                    </button>
+                    <button class="action-btn btn-info" onclick="shareComment()">
+                        📢 Partager
+                    </button>
+                    <button class="action-btn btn-warning" onclick="generateVariants()">
+                        🔄 3 Variantes
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Titre du Modal</h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Content dynamique -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const CONFIG = {
+            OLLAMA_API_URL: 'http://localhost:11434',
+            N8N_INTERFACE_URL: 'http://localhost:5678',
+            N8N_WEBHOOK_URL: 'http://localhost:5678/webhook-test/generer-commentaire'
+        };
+
+        // Modèles disponibles
+        const AVAILABLE_MODELS = [
+            { id: 'llama2', name: 'Llama 2' },
+            { id: 'mistral', name: 'Mistral' }
+        ];
+
+        // Variables globales
+        let studentsList = [];
+        let currentStudentId = null;
+        let evaluations = {
+            progres: null,
+            comportement: null,
+            autonomie: null,
+            participation: null
+        };
+
+        // Initialisation au chargement de la page
+        function initializeApp() {
+            console.log('🚀 Initialisation application...');
+            
+            // Charger les élèves
+            loadStudents();
+            
+            // Attacher les event listeners
+            const buttons = {
+                'openN8nBtn': openN8n,
+                'copyBtn': copyComment,
+                'shareBtn': shareComment,
+                'resetBtn': resetForm,
+                'exportBtn': showExportMenu,
+                'importBtn': importData,
+                'addStudentBtn': showAddStudentModal,
+                'generateBtn': genererCommentaireAvecIA,
+                'testOllamaBtn': testOllamaConnection
+            };
+
+            // Attacher les listeners pour chaque bouton
+            Object.entries(buttons).forEach(([id, handler]) => {
+                const button = document.getElementById(id);
+                if (button) {
+                    console.log(`🔗 Attachement listener pour ${id}`);
+                    button.addEventListener('click', handler);
+                } else {
+                    console.error(`❌ Bouton non trouvé: ${id}`);
+                }
+            });
+            
+            // Attacher les listeners pour les boutons d'évaluation
+            attachRatingButtonListeners();
+            
+            // Sélectionner le premier élève par défaut
+            if (studentsList.length > 0) {
+                selectStudent(studentsList[0].id);
+            }
+
+            // Test de connexion initial Ollama
+            setTimeout(() => {
+                console.log('🔍 Test connexion initial Ollama...');
+                testOllamaConnection();
+            }, 1000);
+
+            console.log('✅ Application initialisée avec succès !');
+            showStatusMessage('Générateur LSU V2 prêt ! 🚀', 'success');
+        }
+
+        // Test connexion Ollama
+        async function testOllamaConnection() {
+            try {
+                const response = await fetch('http://localhost:11434/api/tags', {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log('✅ Connexion Ollama réussie:', data);
+                showStatusMessage('Connexion Ollama établie', 'success');
+                return true;
+            } catch (error) {
+                console.error('❌ Erreur connexion Ollama:', error);
+                showStatusMessage('Erreur de connexion à Ollama', 'error');
+                return false;
+            }
+        }
+
+        // Sélectionner un élève
+        function selectStudent(studentId) {
+            console.log('👤 Sélection élève:', studentId);
+            currentStudentId = studentId;
+            const student = studentsList.find(s => s.id === studentId);
+            
+            if (!student) {
+                console.error('❌ Élève non trouvé:', studentId);
+                return;
+            }
+
+            // Mettre à jour l'interface
+            document.getElementById('currentStudentName').textContent = `Évaluation de ${student.nom}`;
+            document.getElementById('niveauSelect').value = student.niveau;
+            
+            // Charger les évaluations existantes
+            evaluations = { ...student.evaluations };
+            updateEvaluationButtons();
+            
+            // Mettre à jour la classe active
+            document.querySelectorAll('.student-item').forEach(item => {
+                item.classList.toggle('active', item.dataset.studentId === studentId);
+            });
+
+            showStatusMessage(`Élève sélectionné: ${student.nom}`, 'success');
+            updateCompetenceSummary();
+        }
+
+        // Mettre à jour l'état des boutons d'évaluation
+        function updateEvaluationButtons() {
+            document.querySelectorAll('.rating-btn').forEach(btn => {
+                const category = btn.dataset.category;
+                const value = btn.dataset.value;
+                if (evaluations[category] === value) {
+                    btn.classList.add('active');
+                } else {
+                btn.classList.remove('active');
+                }
+            });
+        }
+
+        // Gérer le clic sur un bouton d'évaluation
+        function handleRatingClick(event) {
+            const button = event.currentTarget;
+            const category = button.dataset.category;
+            const value = button.dataset.value;
+            
+            console.log(`Évaluation ${category}: ${value}`);
+            
+            // Mettre à jour l'évaluation
+            evaluations[category] = value;
+
+            // Mettre à jour l'interface
+            updateEvaluationButtons();
+            
+            // Sauvegarder l'évaluation pour l'élève courant
+            if (currentStudentId) {
+                const student = studentsList.find(s => s.id === currentStudentId);
+                if (student) {
+                    student.evaluations = { ...evaluations };
+                    saveStudents();
+                }
+            }
+            
+            console.log('Évaluations actuelles:', evaluations);
+            showStatusMessage(`${category} évalué: ${value}`, 'success');
+            updateCompetenceSummary();
+        }
+
+        function buildCompetencesFromEvaluations(evaluations) {
+            const competences = {
+                progres: evaluations.progres || 'non évalué',
+                comportement: evaluations.comportement || 'non évalué',
+                autonomie: evaluations.autonomie || 'non évalué',
+                participation: evaluations.participation || 'non évalué'
+            };
+
+            let summary = "Compétences de l'élève :\n";
+            summary += `- Progrès : ${competences.progres}\n`;
+            summary += `- Comportement : ${competences.comportement}\n`;
+            summary += `- Autonomie : ${competences.autonomie}\n`;
+            summary += `- Participation : ${competences.participation}\n`;
+
+            return summary;
+        }
+
+        // Générer commentaire avec IA
+        async function genererCommentaireAvecIA() {
+            try {
+                console.log('🚀 Démarrage génération commentaire...');
+                
+                // Vérifier qu'un élève est sélectionné
+                if (!currentStudentId) {
+                    showStatusMessage('Aucun élève sélectionné', 'error');
+                    return;
+                }
+
+                // Récupérer l'élève actuel
+                const currentStudent = studentsList.find(s => s.id === currentStudentId);
+                if (!currentStudent) {
+                    showStatusMessage('Élève non trouvé', 'error');
+                    return;
+                }
+
+                // Vérifier qu'il y a des évaluations
+                const hasEvaluations = Object.values(evaluations).some(val => val !== null && val !== undefined);
+                if (!hasEvaluations) {
+                    showStatusMessage('Veuillez d\'abord évaluer au moins une compétence', 'warning');
+                    return;
+                }
+
+                showStatusMessage('Génération du commentaire en cours...', 'info');
+
+                // Récupérer les valeurs des formulaires
+                const niveau = document.getElementById('niveauSelect').value;
+                const periode = document.getElementById('periodeSelect').value;
+                const matiere = document.getElementById('matiereSelect').value;
+                const model = document.getElementById('modelSelect').value;
+
+                // Construire le texte des compétences
+                let evaluationsText = "";
+                if (evaluations.progres) evaluationsText += `- Progrès observés : ${evaluations.progres}\n`;
+                if (evaluations.comportement) evaluationsText += `- Comportement : ${evaluations.comportement}\n`;
+                if (evaluations.autonomie) evaluationsText += `- Autonomie : ${evaluations.autonomie}\n`;
+                if (evaluations.participation) evaluationsText += `- Participation : ${evaluations.participation}\n`;
+
+                // Préparer les données pour Ollama
+                const requestData = {
+                    model: model,
+                    prompt: `Génère un commentaire pour un élève de primaire avec les critères suivants :
+Nom: ${currentStudent.nom}
+Niveau: ${niveau}
+Matière: ${matiere}
+Période: ${periode}
+Compétences:
+${evaluationsText}`,
+                    stream: false
+                };
+
+                console.log(' Données envoyées à Ollama:', requestData);
+
+                // Appel direct à Ollama
+                const response = await fetch('http://localhost:11434/api/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(requestData)
+                });
+
+                console.log('📡 Statut réponse:', response.status);
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('❌ Erreur réponse:', errorText);
+                    throw new Error(`Erreur HTTP: ${response.status} - ${errorText}`);
+                }
+
+                const data = await response.json();
+                console.log('✅ Données reçues de Ollama:', data);
+                
+                // Chercher le commentaire dans la réponse
+                let commentaire = '';
+                if (data.response) {
+                    commentaire = data.response;
+                } else if (typeof data === 'string') {
+                    commentaire = data;
+                } else {
+                    console.log('📋 Structure de données complète:', JSON.stringify(data, null, 2));
+                    commentaire = 'Commentaire généré mais format de réponse inattendu. Voir console pour plus de détails.';
+                }
+                
+                if (commentaire && commentaire.trim()) {
+                    // Nettoyer le commentaire
+                    commentaire = commentaire.trim();
+                    
+                    // L'afficher dans la zone de texte
+                    document.getElementById('commentaire').value = commentaire;
+                    showStatusMessage('✅ Commentaire généré avec succès !', 'success');
+                    
+                    console.log('📝 Commentaire final:', commentaire);
+                } else {
+                    throw new Error('Aucun commentaire reçu du serveur');
+                }
+
+            } catch (error) {
+                console.error('❌ Erreur lors de la génération du commentaire:', error);
+                
+                // Messages d'erreur plus spécifiques
+                if (error.message.includes('Failed to fetch')) {
+                    showStatusMessage('Erreur de connexion. Vérifiez qu\'Ollama est démarré sur localhost:11434', 'error');
+                } else if (error.message.includes('CORS')) {
+                    showStatusMessage('Erreur CORS. Vérifiez la configuration CORS d\'Ollama', 'error');
+                } else if (error.message.includes('HTTP 404')) {
+                    showStatusMessage('API non trouvée. Vérifiez qu\'Ollama est bien installé', 'error');
+                } else if (error.message.includes('HTTP 500')) {
+                    showStatusMessage('Erreur interne du serveur. Vérifiez les logs Ollama', 'error');
+                } else {
+                    showStatusMessage(`Erreur: ${error.message}`, 'error');
+                }
+            }
+        }
+
+        // Fonction de test pour déboguer
+        async function testWebhookFromHTML() {
+            try {
+                console.log('🧪 Test de connexion webhook...');
+                
+                const testData = {
+                    nom: "Test Élève",
+                    niveau: "CP",
+                    matiere: "Français",
+                    periode: "Trimestre 1",
+                    evaluations: "- Test : excellent",
+                    model: "mistral"
+                };
+
+                const response = await fetch('http://localhost:5678/webhook-test/generer-commentaire', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(testData)
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('✅ Test réussi:', data);
+                    alert('Test webhook réussi ! Voir console pour détails.');
+                    return true;
+                } else {
+                    const errorText = await response.text();
+                    console.error('❌ Erreur test:', errorText);
+                    alert(`Erreur test: ${response.status}`);
+                }
+            } catch (error) {
+                console.error('❌ Erreur test webhook:', error);
+                alert(`Erreur: ${error.message}`);
+                return false;
+            }
+        }
+
+        // Copier le commentaire
+        function copyComment() {
+            const textarea = document.getElementById('commentaire');
+            if (!textarea.value.trim()) {
+                showStatusMessage('Aucun commentaire à copier', 'warning');
+                return;
+            }
+
+            textarea.select();
+            textarea.setSelectionRange(0, 99999);
+
+            try {
+                document.execCommand('copy');
+                showStatusMessage('Commentaire copié !', 'success');
+            } catch (err) {
+                showStatusMessage('Erreur lors de la copie', 'error');
+            }
+        }
+
+        // Partager le commentaire
+        function shareComment() {
+            const comment = document.getElementById('commentaire').value;
+            if (!comment.trim()) {
+                showStatusMessage('Aucun commentaire à partager', 'warning');
+                return;
+            }
+
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Commentaire d\'évaluation',
+                    text: comment
+                }).then(() => {
+                    showStatusMessage('Commentaire partagé !', 'success');
+                }).catch(() => {
+                    showStatusMessage('Partage annulé', 'info');
+                });
+            } else {
+                showStatusMessage('Partage non supporté sur ce navigateur', 'warning');
+            }
+        }
+
+        // Générer des variantes
+        function generateVariants() {
+            showStatusMessage('Fonction des variantes à implémenter', 'info');
+        }
+
+        // Ouvrir n8n
+        function openN8n() {
+            window.open(CONFIG.N8N_INTERFACE_URL, '_blank');
+        }
+
+        // Réinitialiser le formulaire
+        function resetForm() {
+            evaluations = { progres: null, comportement: null, autonomie: null, participation: null };
+            document.querySelectorAll('.rating-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById('commentaire').value = '';
+            showStatusMessage('Formulaire réinitialisé', 'success');
+        }
+
+        // Export JSON complet (fonction améliorée)
+        function exportData() {
+            const data = {
+                metadata: {
+                    applicationName: "Générateur LSU V2",
+                    version: "2.0",
+                    exportDate: new Date().toISOString(),
+                    totalStudents: studentsList.length,
+                    exportedBy: "Enseignant"
+                },
+                students: studentsList.map(student => ({
+                    ...student,
+                    evaluationCount: Object.values(student.evaluations || {}).filter(val => val !== null).length,
+                    lastModified: new Date().toISOString()
+                })),
+                settings: {
+                    defaultLevel: document.getElementById('niveauSelect').value,
+                    defaultPeriod: document.getElementById('periodeSelect').value,
+                    defaultSubject: document.getElementById('matiereSelect').value,
+                    defaultModel: document.getElementById('modelSelect').value
+                }
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `LSU_export_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+
+            showStatusMessage(`Données exportées: ${studentsList.length} élève(s)`, 'success');
+        }
+
+        // Export CSV pour Excel
+        function exportToCSV() {
+            if (studentsList.length === 0) {
+                showStatusMessage('Aucune donnée à exporter', 'warning');
+                return;
+            }
+
+            const headers = [
+                'Nom',
+                'Niveau', 
+                'Classe',
+                'Progrès',
+                'Comportement',
+                'Autonomie',
+                'Participation',
+                'Évaluations complètes',
+                'Date de création'
+            ];
+
+            const csvData = studentsList.map(student => {
+                const evaluations = student.evaluations || {};
+                const completedEvaluations = Object.values(evaluations).filter(val => val !== null).length;
+                
+                return [
+                    `"${student.nom}"`,
+                    `"${student.niveau?.toUpperCase() || 'Non défini'}"`,
+                    `"${student.classe || 'Non définie'}"`,
+                    `"${evaluations.progres || 'Non évalué'}"`,
+                    `"${evaluations.comportement || 'Non évalué'}"`,
+                    `"${evaluations.autonomie || 'Non évalué'}"`,
+                    `"${evaluations.participation || 'Non évalué'}"`,
+                    `"${completedEvaluations}/4"`,
+                    `"${new Date().toLocaleDateString('fr-FR')}"`
+                ].join(',');
+            });
+
+            const csvContent = [headers.join(','), ...csvData].join('\n');
+            
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `LSU_evaluations_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+
+            showStatusMessage('Export CSV créé avec succès', 'success');
+        }
+
+        // Export PDF (rapport complet)
+        function exportToPDF() {
+            const reportContent = generateHTMLReport();
+            
+            // Créer une nouvelle fenêtre pour l'impression
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Rapport LSU - ${new Date().toLocaleDateString('fr-FR')}</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 20px; }
+                        .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #333; padding-bottom: 10px; }
+                        .student { margin-bottom: 30px; page-break-inside: avoid; }
+                        .student-name { font-size: 18px; font-weight: bold; color: #333; margin-bottom: 10px; }
+                        .evaluations { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+                        .eval-item { padding: 5px; border-left: 3px solid #667eea; background: #f8f9fa; }
+                        .eval-label { font-weight: bold; }
+                        .eval-value { color: #666; }
+                        .summary { background: #e3f2fd; padding: 10px; border-radius: 5px; margin-top: 20px; }
+                        @media print { .no-print { display: none; } }
+                    </style>
+                </head>
+                <body>
+                    ${reportContent}
+                    <div class="no-print" style="margin-top: 20px; text-align: center;">
+                        <button onclick="window.print()" style="padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                            🖨️ Imprimer / Sauvegarder en PDF
+                        </button>
+                        <button onclick="window.close()" style="padding: 10px 20px; background: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer; margin-left: 10px;">
+                            ✖️ Fermer
+                        </button>
+                    </div>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+            
+            showStatusMessage('Rapport PDF ouvert dans une nouvelle fenêtre', 'success');
+        }
+
+        // Générer le contenu HTML du rapport
+        function generateHTMLReport() {
+            const now = new Date();
+            const completedStudents = studentsList.filter(s => {
+                const evals = Object.values(s.evaluations || {});
+                return evals.filter(val => val !== null).length === 4;
+            });
+
+            let html = `
+                <div class="header">
+                    <h1>📊 Rapport d'Évaluations LSU</h1>
+                    <p>Généré le ${now.toLocaleDateString('fr-FR')} à ${now.toLocaleTimeString('fr-FR')}</p>
+                    <p><strong>${studentsList.length}</strong> élève(s) | <strong>${completedStudents.length}</strong> évaluation(s) complète(s)</p>
+                </div>
+            `;
+
+            if (studentsList.length === 0) {
+                html += '<p style="text-align: center; color: #666;">Aucun élève à afficher</p>';
+            } else {
+                studentsList.forEach(student => {
+                    const evaluations = student.evaluations || {};
+                    const completedCount = Object.values(evaluations).filter(val => val !== null).length;
+                    
+                    html += `
+                        <div class="student">
+                            <div class="student-name">
+                                👤 ${student.nom} 
+                                <span style="font-size: 14px; color: #666; font-weight: normal;">
+                                    (${student.niveau?.toUpperCase()} - ${student.classe}) 
+                                    - ${completedCount}/4 évaluations
+                                </span>
+                            </div>
+                            
+                            <div class="evaluations">
+                                <div class="eval-item">
+                                    <div class="eval-label">📈 Progrès observés</div>
+                                    <div class="eval-value">${evaluations.progres || 'Non évalué'}</div>
+                                </div>
+                                <div class="eval-item">
+                                    <div class="eval-label">❤️ Comportement</div>
+                                    <div class="eval-value">${evaluations.comportement || 'Non évalué'}</div>
+                                </div>
+                                <div class="eval-item">
+                                    <div class="eval-label">🚀 Autonomie</div>
+                                    <div class="eval-value">${evaluations.autonomie || 'Non évalué'}</div>
+                                </div>
+                                <div class="eval-item">
+                                    <div class="eval-label">💡 Participation</div>
+                                    <div class="eval-value">${evaluations.participation || 'Non évalué'}</div>
+                                </div>
+                            </div>
+                            
+                            ${completedCount === 4 ? 
+                                '<div style="color: #10b981; font-weight: bold;">✅ Évaluation complète</div>' : 
+                                '<div style="color: #f59e0b; font-weight: bold;">⚠️ Évaluation incomplète</div>'
+                            }
+                        </div>
+                    `;
+                });
+            }
+
+            // Statistiques
+            const stats = calculateStatistics();
+            html += `
+                <div class="summary">
+                    <h3>📈 Statistiques</h3>
+                    <p><strong>Total élèves :</strong> ${stats.total}</p>
+                    <p><strong>Évaluations complètes :</strong> ${stats.completed} (${stats.completionRate}%)</p>
+                    <p><strong>Évaluations en cours :</strong> ${stats.partial}</p>
+                    <p><strong>Non évalués :</strong> ${stats.notStarted}</p>
+                </div>
+            `;
+
+            return html;
+        }
+
+        // Calculer les statistiques
+        function calculateStatistics() {
+            const total = studentsList.length;
+            let completed = 0;
+            let partial = 0;
+            let notStarted = 0;
+
+            studentsList.forEach(student => {
+                const evalCount = Object.values(student.evaluations || {}).filter(val => val !== null).length;
+                if (evalCount === 4) completed++;
+                else if (evalCount > 0) partial++;
+                else notStarted++;
+            });
+
+            return {
+                total,
+                completed,
+                partial,
+                notStarted,
+                completionRate: total > 0 ? Math.round((completed / total) * 100) : 0
+            };
+        }
+
+        // Menu des options d'export
+        function showExportMenu() {
+            const modal = document.getElementById('modal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
+
+            modalTitle.textContent = 'Options d\'export';
+            modalBody.innerHTML = `
+                <div style="margin-bottom: 20px;">
+                    <h4>📊 Choisissez le format d'export :</h4>
+                </div>
+                
+                <div style="display: grid; gap: 15px;">
+                    <button onclick="exportData(); closeModal();" class="action-btn btn-primary" style="width: 100%;">
+                        📋 Export JSON complet
+                        <small style="display: block; font-weight: normal;">Données complètes pour sauvegarde</small>
+                    </button>
+                    
+                    <button onclick="exportToCSV(); closeModal();" class="action-btn btn-success" style="width: 100%;">
+                        📊 Export CSV (Excel)
+                        <small style="display: block; font-weight: normal;">Compatible Excel/Google Sheets</small>
+                    </button>
+                    
+                    <button onclick="exportToPDF(); closeModal();" class="action-btn btn-info" style="width: 100%;">
+                        📄 Rapport PDF
+                        <small style="display: block; font-weight: normal;">Rapport d'évaluations imprimable</small>
+                    </button>
+                </div>
+                
+                <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 5px; font-size: 14px; color: #333;">
+                    <strong>💡 Conseils :</strong><br>
+                    • JSON : Pour sauvegarder et réimporter vos données<br>
+                    • CSV : Pour analyser dans Excel ou Google Sheets<br>
+                    • PDF : Pour imprimer ou partager le rapport
+                </div>
+                
+                <div class="modal-actions" style="margin-top: 20px;">
+                    <button onclick="closeModal()" class="action-btn btn-danger">
+                        ❌ Annuler
+                    </button>
+                </div>
+            `;
+
+            modal.classList.add('show');
+        }
+
+        // Importer les données
+        function importData() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    try {
+                        const data = JSON.parse(event.target.result);
+                        if (data.students && Array.isArray(data.students)) {
+                            studentsList = data.students;
+                            renderStudentsList();
+                            showStatusMessage('Données importées !', 'success');
+                        } else {
+                            throw new Error('Format invalide');
+                        }
+                    } catch (error) {
+                        showStatusMessage('Erreur import: ' + error.message, 'error');
+                    }
+                };
+                reader.readAsText(file);
+            };
+
+            input.click();
+        }
+
+        // Modal pour ajouter un élève
+        function showAddStudentModal() {
+            const modal = document.getElementById('modal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
+
+            modalTitle.textContent = 'Ajouter un nouvel élève';
+            modalBody.innerHTML = `
+                    <div class="form-group">
+                    <label>Nom et prénom :</label>
+                    <input type="text" id="newStudentName" placeholder="Ex: Marie Dupont" required>
+                    </div>
+                    <div class="form-group">
+                    <label>Niveau :</label>
+                    <select id="newStudentLevel">
+                            <option value="cp">CP</option>
+                            <option value="ce1">CE1</option>
+                            <option value="ce2">CE2</option>
+                            <option value="cm1">CM1</option>
+                            <option value="cm2">CM2</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                    <label>Classe :</label>
+                    <input type="text" id="newStudentClass" placeholder="Ex: CP-A">
+                    </div>
+                <div class="modal-actions">
+                    <button onclick="addNewStudent()" class="action-btn btn-success">
+                        ✅ Ajouter
+                    </button>
+                    <button onclick="closeModal()" class="action-btn btn-danger">
+                        ❌ Annuler
+                    </button>
+                </div>
+            `;
+
+            modal.classList.add('show');
+        }
+
+        // Ajouter un nouvel élève
+        function addNewStudent() {
+            const name = document.getElementById('newStudentName').value.trim();
+            const level = document.getElementById('newStudentLevel').value;
+            const classe = document.getElementById('newStudentClass').value.trim();
+
+            if (!name) {
+                showStatusMessage('Le nom est obligatoire', 'warning');
+                return;
+            }
+
+            const newStudent = {
+                id: `${name.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}`,
+                nom: name,
+                niveau: level,
+                classe: classe || `${level.toUpperCase()}-A`,
+                evaluations: {}
+            };
+
+            studentsList.push(newStudent);
+            renderStudentsList();
+            closeModal();
+            showStatusMessage(`Élève "${name}" ajouté !`, 'success');
+        }
+
+        // Fermer le modal
+        function closeModal() {
+            document.getElementById('modal').classList.remove('show');
+        }
+
+        // Afficher un message de statut
+        function showStatusMessage(message, type = 'info') {
+            // Supprimer les anciens messages
+            const existingMessages = document.querySelectorAll('.status-message');
+            existingMessages.forEach(msg => msg.remove());
+
+            const statusDiv = document.createElement('div');
+            statusDiv.className = `status-message status-${type}`;
+            statusDiv.textContent = message;
+            document.body.appendChild(statusDiv);
+
+            setTimeout(() => {
+                statusDiv.remove();
+            }, 4000);
+        }
+
+        // Rendre la liste des élèves
+        function renderStudentsList() {
+            const container = document.getElementById('students-container');
+            container.innerHTML = '';
+
+            studentsList.forEach(student => {
+                const evaluatedCount = Object.values(student.evaluations || {}).filter(val => val !== null).length;
+                const totalCount = 4;
+                
+                let statusText = 'Aucune évaluation';
+                let statusColor = '#6b7280';
+                
+                if (evaluatedCount === totalCount) {
+                    statusText = '✓ Évaluation complète';
+                    statusColor = '#10b981';
+                } else if (evaluatedCount > 0) {
+                    statusText = `⚠️ ${evaluatedCount}/${totalCount} évalué(s)`;
+                    statusColor = '#f59e0b';
+                }
+
+                const initials = student.nom.split(' ')
+                    .map(name => name.charAt(0))
+                    .join('')
+                    .toUpperCase()
+                    .substring(0, 2);
+
+                const studentDiv = document.createElement('div');
+                studentDiv.className = `student-item ${currentStudentId === student.id ? 'active' : ''}`;
+                studentDiv.dataset.studentId = student.id;
+                
+                studentDiv.innerHTML = `
+                    <div class="student-avatar" style="background: ${getAvatarColor(student.id)}">${initials}</div>
+                    <div class="student-info">
+                        <h4>${student.nom}</h4>
+                        <p>${student.niveau.toUpperCase()} - ${student.classe}</p>
+                        <p style="font-size: 10px; color: ${statusColor};">${statusText}</p>
+                    </div>
+                `;
+
+                studentDiv.addEventListener('click', () => selectStudent(student.id));
+                container.appendChild(studentDiv);
+            });
+        }
+
+        // Couleur d'avatar basée sur l'ID
+        function getAvatarColor(id) {
+            const colors = ['#667eea', '#f093fb', '#4facfe', '#43e97b', '#fa709a', '#ffecd2'];
+            const index = id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length;
+            return colors[index];
+        }
+
+        // Attacher les event listeners pour les boutons d'évaluation
+        function attachRatingButtonListeners() {
+            console.log('🔗 Attachement des listeners d\'évaluation...');
+            document.querySelectorAll('.rating-btn').forEach(btn => {
+                btn.addEventListener('click', handleRatingClick);
+            });
+        }
+
+        // Charger les élèves
+        function loadStudents() {
+            console.log('📚 Chargement des élèves...');
+            // Charger depuis le localStorage ou utiliser des données par défaut
+            const savedStudents = localStorage.getItem('studentsList');
+            if (savedStudents) {
+                studentsList = JSON.parse(savedStudents);
+            } else {
+                // Données par défaut
+                studentsList = [
+                    {
+                        id: 'john',
+                        nom: 'John Doe',
+                        niveau: 'cp',
+                        classe: 'CP-A',
+                        evaluations: {}
+                    },
+                    {
+                        id: 'marie',
+                        nom: 'Marie Leblanc',
+                        niveau: 'ce1',
+                        classe: 'CE1-B',
+                        evaluations: {}
+                    }
+                ];
+                // Sauvegarder les données par défaut
+                localStorage.setItem('studentsList', JSON.stringify(studentsList));
+            }
+            renderStudentsList();
+        }
+
+        // Sauvegarder les élèves
+        function saveStudents() {
+            console.log('💾 Sauvegarde des élèves...');
+            localStorage.setItem('studentsList', JSON.stringify(studentsList));
+        }
+
+        // Fonction d'affichage dynamique des sélections
+        function updateCompetenceSummary() {
+            const labels = {
+                progres: "Progrès",
+                comportement: "Comportement",
+                autonomie: "Autonomie",
+                participation: "Participation"
+            };
+            const values = {
+                excellent: "Excellent",
+                bien: "Bien",
+                satisfaisant: "Satisfaisant",
+                ameliorer: "À améliorer",
+                tresbien: "Très bien",
+                correct: "Correct",
+                surveiller: "À surveiller",
+                excellente: "Excellente",
+                bonne: "Bonne",
+                moyenne: "Moyenne",
+                insuffisante: "Insuffisante",
+                tresactive: "Très active",
+                active: "Active",
+                moderee: "Modérée",
+                discrete: "Discrète"
+            };
+            let html = "<strong>Votre sélection :</strong><ul>";
+            for (const [key, val] of Object.entries(evaluations)) {
+                if (val) {
+                    html += `<li>${labels[key]} : <span style=\"color:#2563eb;font-weight:bold\">${values[val] || val}</span></li>`;
+                }
+            }
+            html += "</ul>";
+            document.getElementById('competence-summary').innerHTML = html;
+        }
+
+        // Récupérer l'élève actuellement sélectionné
+        function getCurrentStudent() {
+            const studentId = document.getElementById('studentSelect').value;
+            if (!studentId) return null;
+            
+            const students = JSON.parse(localStorage.getItem('students') || '[]');
+            return students.find(student => student.id === studentId) || null;
+        }
+
+        // Récupérer les évaluations d'un élève
+        function getStudentEvaluations(studentId) {
+            const evaluations = JSON.parse(localStorage.getItem('evaluations') || '[]');
+            return evaluations.filter(eval => eval.studentId === studentId);
+        }
+
+        // Construire le texte des compétences à partir des évaluations
+        function buildCompetencesFromEvaluations(evaluations) {
+            return evaluations.map(eval => {
+                const niveau = eval.niveau === 'A' ? 'Acquis' : 
+                              eval.niveau === 'ECA' ? 'En cours d\'acquisition' : 
+                              eval.niveau === 'NA' ? 'Non acquis' : eval.niveau;
+                return `${eval.competence}: ${niveau}`;
+            }).join('\n');
+        }
+
+        // Initialiser le sélecteur de modèle
+        function initializeModelSelector() {
+            const modelSelect = document.getElementById('modelSelect');
+            if (!modelSelect) return;
+
+            // Vider le sélecteur
+            modelSelect.innerHTML = '';
+
+            // Ajouter les options
+            AVAILABLE_MODELS.forEach(model => {
+                const option = document.createElement('option');
+                option.value = model.id;
+                option.textContent = model.name;
+                modelSelect.appendChild(option);
+            });
+
+            // Définir le modèle par défaut
+            modelSelect.value = 'llama2';
+        }
+
+        // Appeler l'initialisation au chargement
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeModelSelector();
+            initializeApp();
+        });
+
+        async function diagnosticComplet() {
+            console.log('🔍 === DIAGNOSTIC COMPLET ===');
+            
+            // 1. Vérifier l'élève sélectionné
+            console.log('👤 Élève sélectionné:', currentStudentId);
+            if (!currentStudentId) {
+                console.error('❌ Aucun élève sélectionné !');
+                return;
+            }
+            
+            // 2. Vérifier les évaluations
+            console.log('📝 Évaluations:', evaluations);
+            const hasEvaluations = Object.values(evaluations).some(val => val !== null && val !== undefined);
+            if (!hasEvaluations) {
+                console.error('❌ Aucune évaluation sélectionnée !');
+                return;
+            }
+            
+            // 3. Test Ollama direct
+            console.log('🤖 Test Ollama...');
+            try {
+                const ollamaTest = await fetch('http://localhost:11434/api/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        model: 'mistral',
+                        prompt: 'Test simple',
+                        stream: false
+                    })
+                });
+                console.log('✅ Ollama status:', ollamaTest.status);
+            } catch (error) {
+                console.error('❌ Erreur Ollama:', error.message);
+            }
+            
+            // 4. Test webhook n8n
+            console.log('🔗 Test webhook n8n...');
+            try {
+                const webhookTest = await fetch('http://localhost:5678/webhook-test/generer-commentaire', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        nom: 'Test Diagnostic',
+                        niveau: 'CP',
+                        matiere: 'Test',
+                        periode: 'Test',
+                        evaluations: '- Test : excellent',
+                        model: 'mistral'
+                    })
+                });
+                console.log('✅ Webhook status:', webhookTest.status);
+                if (webhookTest.ok) {
+                    const data = await webhookTest.json();
+                    console.log('✅ Réponse webhook:', data);
+                } else {
+                    const error = await webhookTest.text();
+                    console.error('❌ Erreur webhook:', error);
+                }
+            } catch (error) {
+                console.error('❌ Erreur connexion webhook:', error.message);
+            }
+            
+            console.log('🔍 === FIN DIAGNOSTIC ===');
+        }
+
+        // Fonction pour tester depuis la console
+        function runDiagnostic() {
+            diagnosticComplet();
+        }
+    </script>
+</body>
+</html>
