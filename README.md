@@ -38,5 +38,10 @@ python proxy.py
 
 - HTML/CSS/JavaScript
 - Flask (Python)
+- ### Technologies utilisées
+...
+
+<!-- Déclenchement GitHub Pages -->
 - Ollama (IA)
-- GitHub Pages (Hébergement) 
+- GitHub Pages (Hébergement)
+- <!-- Déclenchement GitHub Pages -->
